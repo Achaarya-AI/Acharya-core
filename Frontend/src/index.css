@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #383838;
+  
+}
+
+section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 80px;
+}
+
+
+
+.content {
+  min-height: calc(100vh - 70px);
+}
+
+.configDiv,
+.contextDiv {
+  width: calc(100vw - 160px);
+  max-width: 1280px;
+}
+
+.chat-display {
+  max-height: calc(100vh - 70px - 150px);
+}
+
+.chat-input {
+  min-height: 50px;
+  height: 100%;
+  max-height: 175px;
+}
+
+.reasoning {
+  height: max-content;
+}
+
+.sidebar {
+  width: 100%;
+  max-width: 640px;
+  position: fixed;
+  z-index: 0;
+  top: 0%;
+  right: 0%;
+  background-color: #2b2b2b;
+  height: 100%;
+  overflow-x: hidden;
+  transition: 0.5s ease-in-out;
+}
+
+.toggle-open {
+  right: 0%;
+}
+
+.toggle-close {
+  right: -200%;
+}
+
+@media screen and (max-width: 768px) {
+  section {
+    padding: 20px 20px;
+  }
+
+  .content {
+    min-height: calc(100vh - 185px);
+  }
+
+  .chat-display {
+    min-height: calc(100vh - 501px);
+    max-height: calc(100vh - 316px);
+  }
+
+  .chat-input {
+    max-height: 160px;
+  }
+}
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background: #2525259c;  */
+  background: transparent;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
