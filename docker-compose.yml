@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+
+  acharya-server:
+    build:
+      context: ./server
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: acharya-server
+    depends_on:
+      - taxi-redis
+      - taxi-database
+    environment:
+      - PGDATABASE=acharya
+      - PGUSER=acharya
+      - PGPASSWORD=acharya
+      - PGHOST=taxi-database
+      - QDRANT_URL=redis://acharya-qdrant:6333/0
+    ports:
+      - 8003:8000
+    volumes:
+    - ./server:/usr/src/app
+
+  acharya-qdrant:
+    container_name: acharya-qdrant
+    image: qdrant/qdrant:v1.7.3
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage
+
+  acharya-database:
+    container_name: acharya-database
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=acharya
+      - POSTGRES_PASSWORD=acharya
+    expose:
+      - 5432
+    volumes:
+      - taxi-database:/var/lib/postgresql/data
+
+  acharya-client:
+    build:
+      context: ./client
+    command: yarn start
+    container_name: taxi-client
+    depends_on:
+      - acharya-server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL=http://localhost:8003
+      - REACT_APP_GOOGLE_MAPS_KEY=<YOUR_API_KEY>
+    ports:
+      - 3001:3000
+    stdin_open: true
+    volumes:
+      - ./client:/usr/src/app
+
+volumes:
+  acharya-database:
