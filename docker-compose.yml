@@ -1,61 +1,87 @@
-
-# version: "3"
+    
+# version: "3.8"
 
 # services:
-
 #   web:
-#     depends_on: 
+#     build: ./Frontend
+#     ports:
+#       - "3000:3000"
+#     volumes:
+#       - ${PWD}/Frontend
+#     depends_on:
 #       - api
 
-#     build: ./Frontend
-
-#     ports:
-#       - "5173:5173"
-   
-#     develop:
-#       watch:
-#         - action: rebuild
-#           path: ./Frontend/package.json
-          
-#         - action: rebuild
-#           path: ./Frontend/package-lock.json
-#         # it'll watch for changes in the frontend directory and sync the changes with the container real time
-#         - action: sync 
-#           path: ./Frontend
-#           target: /app
-          
-
-#   api: 
+#   api:
 #     build: ./Backend
-
-#     ports: 
+#     ports:
 #       - 8000:8000
-#     develop:
-#       watch:
-#         - action: sync
-#           path: ./Backend
-#           target: /app
-          
-version: "3.8"
+#     volumes:
+#       - ${PWD}/Backend
+
+# volumes:
+#   frontend:
+#   backend:
+
+version: '3.8'
 
 services:
-  web:
-    build: ./Frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ${PWD}/Frontend
-    depends_on:
-      - api
 
-  api:
-    build: ./Backend
+  acharya-server:
+    build:
+      context: ./server
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: acharya-server
+    depends_on:
+      - taxi-redis
+      - taxi-database
+    environment:
+      - PGDATABASE=acharya
+      - PGUSER=acharya
+      - PGPASSWORD=acharya
+      - PGHOST=taxi-database
+      - QDRANT_URL=redis://acharya-qdrant:6333/0
     ports:
-      - 8000:8000
+      - 8003:8000
     volumes:
-      - ${PWD}/Backend
+    - ./server:/usr/src/app
+
+  acharya-qdrant:
+    container_name: acharya-qdrant
+    image: qdrant/qdrant:v1.7.3
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage
+
+  acharya-database:
+    container_name: acharya-database
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=acharya
+      - POSTGRES_PASSWORD=acharya
+    expose:
+      - 5432
+    volumes:
+      - taxi-database:/var/lib/postgresql/data
+
+  acharya-client:
+    build:
+      context: ./Frontend
+    # command: yarn start
+    command: npm start
+    container_name: taxi-client
+    depends_on:
+      - acharya-server
+    environment:
+      # - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BASE_URL=http://localhost:8003
+      # - REACT_APP_GOOGLE_MAPS_KEY=<YOUR_API_KEY>
+    ports:
+      - 3001:3000
+    stdin_open: true
+    volumes:
+      - ./Frontend:/usr/src/app
 
 volumes:
-  frontend:
-  backend:
-
+  acharya-database:
