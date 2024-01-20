@@ -8,4 +8,3 @@ export function requireAuth(input) {
 
     return null;
 }
-

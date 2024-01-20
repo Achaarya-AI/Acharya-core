@@ -1,9 +1,10 @@
+import time
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # Import your custom functions
-from llm import initialize_model, generate_response
+# from llm import initialize_model, generate_response
 
 app = FastAPI()
 
@@ -47,6 +48,8 @@ def home_route(home: UserQuery):
         
         # Call the custom function to generate a response
         # response = generate_response(home.messages)
+        # print(f"response: {home.messages}, reasoning: ")
+        time.sleep(5)
         
         # return {"response": response, "reasoning": ""}
         return {"response": home.messages, "reasoning": ""}

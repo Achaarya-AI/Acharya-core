@@ -4,6 +4,14 @@ from langchain import HuggingFacePipeline
 from langchain import PromptTemplate, LLMChain
 from langchain.globals import set_debug, set_verbose
 
+from langchain.document_loaders import PyPDFLoader, PDFMinerLoader, DirectoryLoader
+from langchain.embeddings import SentenceTransformerEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
+from os.path import join
+import os
+from constants import CHROMA_SETTINGS
+
 # Global variables to store the initialized model and tokenizer
 global_model = None
 global_tokenizer = None
@@ -28,8 +36,8 @@ def initialize_model():
         global_model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto", quantization_config=quantization_config)
         global_tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-        set_debug(True)
-        set_verbose(True)
+        set_debug(False)
+        set_verbose(False)
 
 # Function to generate a response using the initialized model and tokenizer
 def generate_response(question):

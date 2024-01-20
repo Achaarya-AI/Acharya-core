@@ -1,0 +1,61 @@
+
+# version: "3"
+
+# services:
+
+#   web:
+#     depends_on: 
+#       - api
+
+#     build: ./Frontend
+
+#     ports:
+#       - "5173:5173"
+   
+#     develop:
+#       watch:
+#         - action: rebuild
+#           path: ./Frontend/package.json
+          
+#         - action: rebuild
+#           path: ./Frontend/package-lock.json
+#         # it'll watch for changes in the frontend directory and sync the changes with the container real time
+#         - action: sync 
+#           path: ./Frontend
+#           target: /app
+          
+
+#   api: 
+#     build: ./Backend
+
+#     ports: 
+#       - 8000:8000
+#     develop:
+#       watch:
+#         - action: sync
+#           path: ./Backend
+#           target: /app
+          
+version: "3.8"
+
+services:
+  web:
+    build: ./Frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${PWD}/Frontend
+    depends_on:
+      - api
+
+  api:
+    build: ./Backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ${PWD}/Backend
+
+volumes:
+  frontend:
+  backend:
+

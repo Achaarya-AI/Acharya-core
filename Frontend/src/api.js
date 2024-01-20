@@ -7,8 +7,8 @@ export async function config(creds) {
         "subject": String(subject),
     };
 
-    const url = "http://127.0.0.1:8000/settings"
-    // const url = "https://fad1-34-124-245-251.ngrok-free.app/settings"
+    // const url = "http://127.0.0.1:8000/settings"
+    const url = "https://44d0-34-83-96-131.ngrok-free.app/settings"
 
     const res = await fetch(url, {
         method: 'POST',
@@ -24,20 +24,21 @@ export async function config(creds) {
 
 export async function getResponse(creds) {
   
-        const postData = {
-        "messages": String(creds),
-    };
+    const postData = {
+    "messages": String(creds),
+};
 
-    const url = "http://127.0.0.1:8000/home"
-    // const url = "https://fad1-34-124-245-251.ngrok-free.app/home"
+// const url = "http://127.0.0.1:8000/home"
+const url = "https://44d0-34-83-96-131.ngrok-free.app/home"
 
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-      });
+const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(postData),
+  });
 
-    return res;
+return res;
 }
+

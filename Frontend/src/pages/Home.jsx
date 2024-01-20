@@ -8,9 +8,11 @@ import ChatInput from '../components/ChatInput';
 import { getResponse } from '../api';
 
 
+
 function Home() {
     const { input, setInput, messages, setMessages } = useAppState()
     const [loading, setLoading] = useState(false);
+    const [fetchData, setFetchingData] = useState(false)
     const [partialMessage, setPartialMessage] = useState('');
     const [inputDisabled, setInputDisabled] = useState(false);
 
@@ -31,24 +33,16 @@ function Home() {
         checkAuth();
     }, [input.subject]);
 
-    // useEffect(() => {
-    //     if (loading) {
-    //         const interval = setInterval(() => {
-    //             // Simulating gradual message generation
-    //             setPartialMessage((prev) => prev + ' ...');
-    //         }, 500);
-
-    //         return () => clearInterval(interval);
-    //     }
-    // }, [loading]);
+    
 
     const handleSendMessage = async (text) => {
         if (text.trim() !== '') {
             // Store the user message separately
-            const userMessage = { text, isUser: true };
+            const userMessage = { text, isUser: true, reasoning: [] };
 
             setMessages([userMessage, ...messages]);
             setLoading(true);
+            setFetchingData(true)
             setInputDisabled(true);
 
             try {
@@ -59,9 +53,16 @@ function Home() {
                 }
 
                 const data = await response.json()
+                setFetchingData(false)
                 const modelResponse = data.response;
+                const modelReasoning = data.reasoning.source_documents;
 
+                const reasoning = modelReasoning?.map(doc => ({
+                    page_content: doc.page_content || '',
+                    metadata: doc.metadata || {}
+                })) ;
 
+                console.log(data)
 
                 const words = modelResponse.split(' ');
                 let partialMessage = words.slice(0, 10).join(' ');
@@ -76,8 +77,9 @@ function Home() {
                         clearInterval(interval);
                         setPartialMessage('');
                         // Now update the state with both user and model responses
+
                         setMessages([
-                            { text: modelResponse, isUser: false },
+                            { text: modelResponse, isUser: false, reasoning: reasoning },
                             userMessage,
                             ...messages,
                         ]);
@@ -98,17 +100,18 @@ function Home() {
         }
     };
 
-    console.log("loading state", loading)
-    console.log("partialMessage", partialMessage)
+    // console.log("loading state", loading)
+    // console.log("message", messages)
+
 
     return (
         <div className="content bg-secondary-bg font-secondary ">
             <section className="content w-full flex flex-col justify-end gap-5">
                 <div className="h-[100%] flex flex-col-reverse justify-start chat-display overflow-y-auto gap-[40px]">
-                    {loading && <ChatMessages text={partialMessage} isUser={false} />}
+                    {loading && <ChatMessages text={partialMessage} isUser={false} isFetching={fetchData}/>}
                     {messages.map((message, index) => (
 
-                        <ChatMessages key={index} text={message.text} isUser={message.isUser} isLoading={loading} />
+                        <ChatMessages key={index} text={message.text} isUser={message.isUser} isLoading={loading} help={message.reasoning}/>
                     ))}
                 </div>
                 <div className='h-full bg-primary rounded-lg p-5'>

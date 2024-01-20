@@ -15,13 +15,13 @@ body {
 section {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 20px 80px;
+  padding: 20px 80px 10px;
 }
 
 
 
 .content {
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 100px);
 }
 
 .configDiv,
@@ -31,7 +31,7 @@ section {
 }
 
 .chat-display {
-  max-height: calc(100vh - 70px - 150px);
+  max-height: calc(100vh - 70px - 150px - 30px);
 }
 
 .chat-input {

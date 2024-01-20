@@ -37,7 +37,7 @@ export default function Settings() {
                 }
     
                 const data = await response.json();
-                setMessages([{ text: data.response, isUser: false }, ...messages]);
+                setMessages([{ text: data.response, isUser: false, reasoning: data.reasoning }, ...messages]);
             } catch (error) {
                 console.error("Error:", error.message);
             }

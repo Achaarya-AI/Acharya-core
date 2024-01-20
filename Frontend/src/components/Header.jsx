@@ -9,7 +9,7 @@ export default function Header() {
                 <NavLink to="/">
                     <div className="flex md:flex-row flex-col items-center md:gap-5 gap-3">
                         <img src={logo} alt="OdiaGenAI" />
-                        <p className="text-xl font-primary text-white font-bold">OdiaGenAI.org</p>
+                        <p className="text-xl font-primary text-white font-bold">Acharya</p>
                     </div>
                 </NavLink>
                 <div >
