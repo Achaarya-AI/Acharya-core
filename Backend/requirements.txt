@@ -1,14 +1,11 @@
-# bitsandbytes
-# git+https://github.com/huggingface/transformers.git
-# git+https://github.com/huggingface/peft.git
-# git+https://github.com/huggingface/accelerate.git
-# einops
-# safetensors
-# torch
-# xformers
-# langchain
-# ctransformers[cuda]
-# chromadb
-# sentence-transformers
-fastapi
+langchain==0.0.279
+accelerate==0.22.0
+sentence_transformers==2.2.2
+chromadb==0.4.2
+pdfminer.six
+bitsandbytes
+requests
+bs4
+torch==2.1.0
+fastapi 
 uvicorn

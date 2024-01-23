@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # Import your custom functions
-# from llm import initialize_model, generate_response
+from llm import initialize_model, generate_response
 
 app = FastAPI()
 
@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 # Initialize the model once
-# initialize_model()
+initialize_model()
 
 @app.post("/settings")
 def config(settings: ConfigData):
@@ -47,12 +47,12 @@ def home_route(home: UserQuery):
             raise HTTPException(status_code=400, detail="Empty value")
         
         # Call the custom function to generate a response
-        # response = generate_response(home.messages)
+        response = generate_response(home.messages)
         # print(f"response: {home.messages}, reasoning: ")
-        time.sleep(5)
+        # time.sleep(5)
         
-        # return {"response": response, "reasoning": ""}
-        return {"response": home.messages, "reasoning": ""}
+        return {"response": response, "reasoning": ""}
+        # return {"response": home.messages, "reasoning": ""}
     except Exception as e:
         print(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error") 

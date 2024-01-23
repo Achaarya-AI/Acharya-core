@@ -1,2 +1,4 @@
 __pycache__/
 venv/
+requirements2.txt
+ingest.py
