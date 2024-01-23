@@ -15,11 +15,9 @@ export default function Settings() {
     const subjectsArray = [
         'Mathematics',
         'Science',
-        'Social Science',
-        'Agriculture',
-        'Drawing',
-        'Home Science',
-        'Music Vocal'
+        'Hindi',
+        'History',
+        'Geography',
     ];
 
     // console.log(input)
@@ -30,6 +28,7 @@ export default function Settings() {
 
         const submit = async () => {
             try {
+                console.log(input)
                 const response = await config(input);
     
                 if (!response.ok) {

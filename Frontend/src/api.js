@@ -8,7 +8,7 @@ export async function config(creds) {
     };
 
     // const url = "http://127.0.0.1:8000/settings"
-    const url = "https://44d0-34-83-96-131.ngrok-free.app/settings"
+    const url = "https://170d-35-187-228-242.ngrok-free.app/settings"
 
     const res = await fetch(url, {
         method: 'POST',
@@ -29,7 +29,7 @@ export async function getResponse(creds) {
 };
 
 // const url = "http://127.0.0.1:8000/home"
-const url = "https://44d0-34-83-96-131.ngrok-free.app/home"
+const url = "https://170d-35-187-228-242.ngrok-free.app/home"
 
 const res = await fetch(url, {
     method: 'POST',

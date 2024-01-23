@@ -9,7 +9,7 @@ export default function Header() {
                 <NavLink to="/">
                     <div className="flex md:flex-row flex-col items-center md:gap-5 gap-3">
                         <img src={logo} alt="OdiaGenAI" />
-                        <p className="text-xl font-primary text-white font-bold">Acharya</p>
+                        <p className="text-xl font-primary text-white font-bold">Acharya <span className="text-xl font-thin">|</span> आचार्य</p>
                     </div>
                 </NavLink>
                 <div >
@@ -23,7 +23,7 @@ export default function Header() {
                         to="/settings"
                         className={({ isActive }) => `font-bold font-secondary ml-8 ${isActive ? "text-[#7B29FF] " : "text-white"}`}
                     >
-                        Settings
+                        Configuration
                     </NavLink>
                 </div>
             </section>
