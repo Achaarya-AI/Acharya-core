@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { requireAuth } from '../util';
+import { requireAuth, requireConfig } from '../util';
 import { useAppState } from '../AppStateContext';
 import { useNavigate } from 'react-router-dom';
 import ChatMessages from '../components/ChatMessages';
@@ -10,7 +10,7 @@ import { getResponse } from '../api';
 
 
 function Home() {
-    const { input, setInput, messages, setMessages } = useAppState()
+    const { input, setInput, messages, setMessages, darkTheme, isLoggedIn, setIsLoggedIn } = useAppState()
     const [loading, setLoading] = useState(false);
     const [fetchData, setFetchingData] = useState(false)
     const [partialMessage, setPartialMessage] = useState('');
@@ -18,22 +18,52 @@ function Home() {
 
     const navigate = useNavigate();
 
+    const themeColors = darkTheme === true ? {
+        "bg": "bg-primary-dark",
+        "bg2": "bg-secondary-bg-dark",
+        "bgs": "bg-secondary",
+        "chatbg": "bg-chat-bg-dark",
+        "reasonbg": "bg-reason-dark",
+        "txt": "text-white",
+        "color": "white",
+        "reasonIcon": "fill-white",
+    } : {
+        "bg": "bg-primary",
+        "bg2": "bg-secondary-bg",
+        "bgs": "bg-secondary",
+        "chatbg": "bg-chat-bg",
+        "reasonbg": "bg-reason",
+        "txt": "text-reason-dark",
+        "color": "black",
+        "reasonIcon": "fill-dark",
+    }
+
+    console.log("darkTHeme", darkTheme)
+    console.log("messages", messages)
+
+
     useEffect(() => {
         async function checkAuth() {
             try {
-                await requireAuth(input);
+                console.log("top")
+                await requireAuth(isLoggedIn);
+                await requireConfig(input)
+                console.log("bottom")
             } catch (path) {
-                setTimeout(() => {
-                    navigate(path);
-                }, 500);
+                if (!isLoggedIn) {
+                    navigate(path)
+                } else {
+                    setTimeout(() => {
+                        navigate(path);
+                    }, 500);
+                }
+
 
             }
         }
 
         checkAuth();
-    }, [input.subject]);
-
-    
+    }, [isLoggedIn, input.subject]);
 
     const handleSendMessage = async (text) => {
         if (text.trim() !== '') {
@@ -60,7 +90,7 @@ function Home() {
                 const reasoning = modelReasoning?.map(doc => ({
                     page_content: doc.page_content || '',
                     metadata: doc.metadata || {}
-                })) ;
+                }));
 
                 console.log(data)
 
@@ -100,25 +130,27 @@ function Home() {
         }
     };
 
-    // console.log("loading state", loading)
-    // console.log("message", messages)
 
+    if (!isLoggedIn) {
+        return null
+    }
 
     return (
-        <div className="content bg-secondary-bg font-secondary ">
+        <div className={`content ${themeColors.bg2} font-secondary`}>
             <section className="content w-full flex flex-col justify-end gap-5">
                 <div className="h-[100%] flex flex-col-reverse justify-start chat-display overflow-y-auto gap-[40px]">
-                    {loading && <ChatMessages text={partialMessage} isUser={false} isFetching={fetchData}/>}
+                    {loading && <ChatMessages text={partialMessage} isUser={false} isFetching={fetchData} themeColors={themeColors} />}
                     {messages.map((message, index) => (
 
-                        <ChatMessages key={index} text={message.text} isUser={message.isUser} isLoading={loading} help={message.reasoning}/>
+                        <ChatMessages key={index} text={message.text} isUser={message.isUser} isLoading={loading} help={message.reasoning} themeColors={themeColors} />
                     ))}
                 </div>
-                <div className='h-full bg-primary rounded-lg p-5'>
-                    <ChatInput onSendMessage={handleSendMessage} inputDisabled={inputDisabled} />
+                <div className={`h-full ${themeColors.bg} bg-primary rounded-lg p-5 shadow-custom`}>
+                    <ChatInput onSendMessage={handleSendMessage} inputDisabled={inputDisabled} themeColors={themeColors} />
                 </div>
             </section>
         </div>
+
     )
 }
 

@@ -1,44 +1,124 @@
-export async function config(creds) {
-  
-    const {class: classValue , subject} = creds
+const baseUrl = "https://a4e9-34-86-72-27.ngrok-free.app"
 
-    const postConfigData = {
-        "class_": String(classValue),
-        "subject": String(subject),
+
+
+// /google/oauth/token route
+export async function login(code) {
+  try {
+    console.log("code", code)
+    const url = `${baseUrl}/google/oauth/token`
+
+    const data = {
+      client_id: process.env.REACT_APP_CLIENT_ID,
+      client_secret: process.env.REACT_APP_CLIENT_SECRET,
+      code: String(code),
+      redirect_uri: 'http://localhost:3000'
     };
 
-    // const url = "http://127.0.0.1:8000/settings"
-    const url = "https://170d-35-187-228-242.ngrok-free.app/settings"
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Change content type to JSON
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+      },
+      credentials: 'include',
+      body: JSON.stringify(data), // Stringify the data object to JSON
+    });
 
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postConfigData),
-      });
+    if (!response.ok) {
+      throw new Error('Failed to fetch OAuth token');
+    }
 
-    return res;
+    const responseData = await response.json();
+
+    console.log(responseData)
+
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    // Handle error
+  }
 }
 
 
+
+// logout route
+export async function logout() {
+  try {
+    const url = `${baseUrl}/logout`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to logout user');
+    }
+
+    const responseData = await response.json();
+    console.log(responseData);
+
+    return responseData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+
+// settings route
+export async function config(creds) {
+
+  const { class: classValue, subject } = creds
+
+  const postConfigData = {
+    "class_": String(classValue),
+    "subject": String(subject),
+    client_id: process.env.REACT_APP_CLIENT_ID,
+    client_secret: process.env.REACT_APP_CLIENT_SECRET,
+  };
+
+  // const url = "http://127.0.0.1:8000/settings"
+  const url = `${baseUrl}/settings`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(postConfigData),
+    credentials: 'include',
+  });
+
+  return res;
+}
+
+
+
+
+// home route
 export async function getResponse(creds) {
-  
-    const postData = {
+
+  const postData = {
     "messages": String(creds),
-};
+  };
 
-// const url = "http://127.0.0.1:8000/home"
-const url = "https://170d-35-187-228-242.ngrok-free.app/home"
+  // const url = "http://127.0.0.1:8000/home"
+  const url = `${baseUrl}/home`
 
-const res = await fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(postData),
+    credentials: 'include',
   });
 
-return res;
+  return res;
 }
 

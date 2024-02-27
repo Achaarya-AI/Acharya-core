@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useAppState } from '../../AppStateContext';
 
-const Dropdown = ({ items, label, type, disabled }) => {
+const Dropdown = ({ items, label, type, disabled, themeColors }) => {
     const { input, setInput } = useAppState();
     const [selectedItem, setSelectedItem] = useState(input[type]);
 
@@ -24,8 +24,8 @@ const Dropdown = ({ items, label, type, disabled }) => {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-md bg-primary text-white border-2 border-solid border-secondary px-4 h-[40px] focus:outline-none focus:border-secondary">
-                    {input[type] || label }
+                <Menu.Button className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-md ${themeColors.bg} ${themeColors.txt} border-2 border-solid border-secondary px-4 h-[40px] focus:outline-none focus:border-secondary`}>
+                    {input[type] || label}
                     <ChevronDownIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 -mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
             </div>
@@ -40,18 +40,18 @@ const Dropdown = ({ items, label, type, disabled }) => {
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 w-full 
+                    className={`absolute right-0 z-10 mt-2 w-full 
                     max-h-56 overflow-y-auto origin-top-right 
-                    rounded-lg bg-secondary-bg shadow-lg ring-1 
-                    ring-black ring-opacity-5 focus:outline-none"
-                    >
+                    rounded-lg ${themeColors.bg2} shadow-lg ring-1 
+                    ring-black ring-opacity-5 focus:outline-none`}
+                >
                     <div className="py-1">
                         {items.map((item) => (
                             <Menu.Item key={item} data-item={item}>
                                 {({ active }) => (
                                     <div
                                         className={`block px-4 py-2 text-sm cursor-pointer 
-                      ${input[type] === item ? 'bg-secondary text-white' : 'text-white'} 
+                      ${input[type] === item ? `bg-secondary ${themeColors.txt}` : `${themeColors.txt}`} 
                     `}
                                         onClick={() => handleSelectItem(item)}
                                     >

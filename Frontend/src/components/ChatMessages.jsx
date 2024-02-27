@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 
 
 import Help from '../images/help.svg'
+import { ReactComponent as HelpIcon } from '../images/help.svg';
 import ReasoningSideBar from './ReasoningSideBar';
 
 import { ThreeDots } from 'react-loader-spinner'
 
-const ChatMessages = ({ text, isUser, isLoading, help, isFetching }) => {
+const ChatMessages = ({ text, isUser, isLoading, help, isFetching, themeColors }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isToggleOpen, setToggleOpen] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem('userData'));
+
+
+
 
 
 
@@ -48,29 +54,39 @@ const ChatMessages = ({ text, isUser, isLoading, help, isFetching }) => {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full '>
       <div className={messageStyle}>
-        {!isUser && <div className="flex-none w-[5px] h-100 bg-green-500 rounded-full ml-2 "></div>}
-        <div className='p-4 max-w-[750px] bg-[#2525259c] text-white rounded-lg'>
+        {/* green profile puc to represent the message from the model */}
+        {!isUser && <div className="flex-none w-[40px] h-[40px] bg-green-500 rounded-full ml-2 mt-2 text-center">A</div>}
+        {/* Message content and fetching animation*/}
+        <div className={`p-4 max-w-[750px] ${themeColors.chatbg} ${themeColors.txt} rounded-lg`}>
           <div className={`mb-2 ${isUser ? "text-secondary" : "text-green-500"}`}>
-            {isUser ? `User:` : `Tutor:`}
+            {isUser ? `User:` : `Acharya:`}
           </div>
+          {/* fetching animation  */}
           {isFetching && <ThreeDots
             height="20"
             width="30"
-            color="white" />}
+            color={`${themeColors.color}`} />}
           {formattedText}
         </div>
-        {/* displaying the reasoning button  */}
+        {/* displaying the reasoning button only if the messages not from user  */}
         {!isUser && (isLoading === false) &&
           <div className="flex flex-col justify-end flex-shrink-0">
-            <button className='reasoning bg-[#2525259c] p-2 rounded-lg' onClick={() => setToggleOpen(!isToggleOpen)}>
-              <img src={Help} alt='reasoning ' className='h-[20px]' />
+            <button className={`reasoning ${themeColors.chatbg} p-2 rounded-lg`} onClick={() => setToggleOpen(!isToggleOpen)}>
+              {/* <img src={Help} alt='reasoning ' className='h-[20px] text-black' /> */}
+              <HelpIcon className={`h-[20px] ${themeColors.reasonIcon}`} />
             </button>
           </div>}
-        {isUser && <div className="flex-none w-[5px] h-100 bg-secondary rounded-full mr-2"></div>}
+        {/* User profile pic or purple profile pic to represent the message from user */}
+        {isUser && (userData && userData.profilePic) ? (
+          <img src={userData.profilePic} alt="Profile Pic" className="flex-none h-[40px] rounded-full mr-2" />
+        ) : (
+          <div className="flex-none h-100 bg-secondary rounded-full mr-2"></div>
+        )}
+
       </div>
-      <ReasoningSideBar isToggleOpen={isToggleOpen} handleCloseToggle={() => setToggleOpen(!isToggleOpen)} reasoningArray={uniqueReasoningArray} />
+      <ReasoningSideBar isToggleOpen={isToggleOpen} handleCloseToggle={() => setToggleOpen(!isToggleOpen)} reasoningArray={uniqueReasoningArray} themeColors={themeColors} />
     </div>
   );
 };

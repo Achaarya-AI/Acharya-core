@@ -14,7 +14,7 @@ export default function Input({ onSend }) {
   };
 
   return (
-    <div className="input">
+    <div className="input ">
       <form onSubmit={handleSend}>
         <input
           type="text"
