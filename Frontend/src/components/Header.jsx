@@ -41,6 +41,7 @@ export default function Header() {
             setIsLoggedIn(false);
             localStorage.setItem('isLoggedIn', JSON.stringify(false));
             localStorage.removeItem("userData");
+            localStorage.removeItem("messageId");
             setInput({
                 messages: "",
                 class: 8,

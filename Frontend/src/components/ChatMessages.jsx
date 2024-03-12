@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 
 import Help from '../images/help.svg'
+
 import { ReactComponent as HelpIcon } from '../images/help.svg';
+import { ReactComponent as FeedbackIcon } from '../images/Feedback.svg';
+import { ReactComponent as PasteIcon } from '../images/Paste.svg';
 import ReasoningSideBar from './ReasoningSideBar';
 
 import { ThreeDots } from 'react-loader-spinner'
@@ -59,7 +62,7 @@ const ChatMessages = ({ text, isUser, isLoading, help, isFetching, themeColors }
         {/* green profile puc to represent the message from the model */}
         {!isUser && <div className="flex-none w-[40px] h-[40px] bg-green-500 rounded-full ml-2 mt-2 text-center">A</div>}
         {/* Message content and fetching animation*/}
-        <div className={`p-4 max-w-[750px] ${themeColors.chatbg} ${themeColors.txt} rounded-lg`}>
+        <div className={`p-4 pb-2 max-w-[750px] ${themeColors.chatbg} ${themeColors.txt} rounded-lg`}>
           <div className={`mb-2 ${isUser ? "text-secondary" : "text-green-500"}`}>
             {isUser ? `User:` : `Acharya:`}
           </div>
@@ -69,6 +72,17 @@ const ChatMessages = ({ text, isUser, isLoading, help, isFetching, themeColors }
             width="30"
             color={`${themeColors.color}`} />}
           {formattedText}
+          {!isUser && (isLoading === false) &&
+            <div className='mt-5 flex items-center justify-end gap-1'>
+              <button>
+                <PasteIcon className={`h-[20px] ${themeColors.reasonIcon}`} />
+              </button>
+              <button>
+                <FeedbackIcon className={`h-[20px] ${themeColors.reasonIcon}`} />
+              </button>
+            </div>
+
+          }
         </div>
         {/* displaying the reasoning button only if the messages not from user  */}
         {!isUser && (isLoading === false) &&
@@ -80,7 +94,7 @@ const ChatMessages = ({ text, isUser, isLoading, help, isFetching, themeColors }
           </div>}
         {/* User profile pic or purple profile pic to represent the message from user */}
         {isUser && (userData && userData.profilePic) ? (
-          <img src={userData.profilePic} alt="Profile Pic" className="flex-none h-[40px] rounded-full mr-2" />
+          <img src={userData.profilePic} referrerpolicy="no-referrer" alt="Profile Pic" className="flex-none h-[40px] rounded-full mr-2" />
         ) : (
           <div className="flex-none h-100 bg-secondary rounded-full mr-2"></div>
         )}

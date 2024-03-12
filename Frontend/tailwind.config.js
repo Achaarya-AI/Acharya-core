@@ -35,8 +35,12 @@ module.exports = {
         '80px' : '80px',
       },
       fontFamily: {
-        'primary': [ 'Montserrat', 'serif'],
-        'secondary': [ 'Inter', 'serif'],
+        'primary2' : ['Poppins', 'sans-serif'],
+        'primary': [ 'Montserrat', 'sans-serif'],
+        'secondary': [ 'Inter', 'sans-serif'],
+        'secondary2': [ "Open Sans", "sans-serif"],
+        'tertiary2': ["Lato", "sans-serif"],
+        'hindiText' : ['Mukta', 'sans-serif']
       },
     },
   },

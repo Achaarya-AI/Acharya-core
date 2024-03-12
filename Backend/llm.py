@@ -3,16 +3,17 @@ from os.path import join
 from transformers import BitsAndBytesConfig, AutoModelForCausalLM, AutoTokenizer, pipeline as hf_pipeline
 from langchain import HuggingFacePipeline
 from langchain.embeddings import SentenceTransformerEmbeddings
+from sentence_transformers import SentenceTransformer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
+
+import chromadb
 
 # Global variables to store the initialized model and tokenizer
 global_model = None
 global_tokenizer = None
 db = None
-
-
 
 # Generating Embeddings from the docs folder
 def generate_embeddings():
@@ -100,8 +101,6 @@ def qa_llm():
       return_source_documents=True
     )
     return qa
-
-
 
 def generate_response(instruction):
   response=''

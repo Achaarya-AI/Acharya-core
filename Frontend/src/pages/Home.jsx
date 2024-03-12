@@ -68,7 +68,7 @@ function Home() {
     const handleSendMessage = async (text) => {
         if (text.trim() !== '') {
             // Store the user message separately
-            const userMessage = { text, isUser: true, reasoning: [] };
+            const userMessage = { text, isUser: true };
 
             setMessages([userMessage, ...messages]);
             setLoading(true);
@@ -76,7 +76,8 @@ function Home() {
             setInputDisabled(true);
 
             try {
-                const response = await getResponse(text);
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                const response = await getResponse(text, localStorage.getItem('messageId'), userData.email);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`)
@@ -109,7 +110,7 @@ function Home() {
                         // Now update the state with both user and model responses
 
                         setMessages([
-                            { text: modelResponse, isUser: false, reasoning: reasoning },
+                            { text: modelResponse, isUser: false, reasoning: reasoning, feedback: 0 },
                             userMessage,
                             ...messages,
                         ]);

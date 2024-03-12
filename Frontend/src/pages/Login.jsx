@@ -48,11 +48,11 @@ export default function Login() {
 
                 // console.log("userDataObj", userData)
                 localStorage.setItem('userData', JSON.stringify({
-                    name: response.name,
-                    email: response.email,
-                    profilePic: response.profile
+                    name: response.user.name,
+                    email: response.user.email,
+                    profilePic: response.user.profile
                 }));
-
+                localStorage.setItem('messageId', response.messages.messageId)
                 localStorage.setItem('isLoggedIn', 'true'); 
                 const data = JSON.parse(localStorage.getItem('userData')); 
                 console.log(data.name);

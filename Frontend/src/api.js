@@ -1,11 +1,11 @@
-const baseUrl = "https://a4e9-34-86-72-27.ngrok-free.app"
+const baseUrl = "https://2984-34-75-21-233.ngrok-free.app"
 
 
 
 // /google/oauth/token route
 export async function login(code) {
   try {
-    console.log("code", code)
+    // console.log("code", code)
     const url = `${baseUrl}/google/oauth/token`
 
     const data = {
@@ -31,7 +31,7 @@ export async function login(code) {
 
     const responseData = await response.json();
 
-    console.log(responseData)
+    // console.log(responseData)
 
     return responseData;
   } catch (error) {
@@ -60,7 +60,7 @@ export async function logout() {
     }
 
     const responseData = await response.json();
-    console.log(responseData);
+    // console.log(responseData);
 
     return responseData;
   } catch (error) {
@@ -71,13 +71,15 @@ export async function logout() {
 
 
 // settings route
-export async function config(creds) {
+export async function config(creds, messageId, email) {
 
   const { class: classValue, subject } = creds
 
   const postConfigData = {
     "class_": String(classValue),
     "subject": String(subject),
+    "messageId":String(messageId),
+    "email":String(email),
     client_id: process.env.REACT_APP_CLIENT_ID,
     client_secret: process.env.REACT_APP_CLIENT_SECRET,
   };
@@ -101,10 +103,12 @@ export async function config(creds) {
 
 
 // home route
-export async function getResponse(creds) {
+export async function getResponse(creds, messageId, email) {
 
   const postData = {
     "messages": String(creds),
+    "messageId":String(messageId),
+    "email":String(email),
   };
 
   // const url = "http://127.0.0.1:8000/home"

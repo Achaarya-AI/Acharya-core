@@ -50,18 +50,19 @@ export default function Settings() {
         const submit = async () => {
             try {
                 console.log(input)
-                const response = await config(input);
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                const response = await config(input, localStorage.getItem('messageId'), userData.email);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
                 const data = await response.json();
-                setMessages([{ text: data.response, isUser: false, reasoning: data.reasoning }, ...messages]);
+                setMessages([{ text: data.response, isUser: false, reasoning: data.reasoning, feedback: 0 }, ...messages]);
             } catch (error) {
                 console.error("Error:", error.message);
                 setIsLoggedIn(false);
-                localStorage.setItem('isLoggedIn', JSON.stringify(false));
+                // localStorage.setItem('isLoggedIn', JSON.stringify(false));
                 navigate("/")
             }
         }
